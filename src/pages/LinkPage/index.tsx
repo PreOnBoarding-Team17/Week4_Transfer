@@ -136,7 +136,7 @@ const TableData = (data: DataInterface) => {
           }}
         >
           {new Array(data.download_count).fill(0).map((el, index) => (
-            <LinkReceivers key={index}>
+            <LinkReceivers key={index + el}>
               <Avatar text={(index + 10).toString(32)} />
             </LinkReceivers>
           ))}
