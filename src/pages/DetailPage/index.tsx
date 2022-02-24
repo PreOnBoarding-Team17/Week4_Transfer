@@ -1,10 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import type { FC } from 'react'
 import styled from 'styled-components'
 import colors from 'styles/colors'
 import Button from 'components/Button'
+import { useParams } from 'react-router-dom'
+import { useDataState } from 'contextAPI'
+import { DataInterface } from 'common/interface'
 
 const DetailPage: FC = () => {
+  const { key } = useParams()
+  const datas = useDataState()
+
+  const [data, setData] = useState<DataInterface | null>(null)
+
+  useEffect(() => {
+    setData(datas.filter((data) => data.key === key)[0])
+  }, [])
+
   return (
     <>
       <Header>

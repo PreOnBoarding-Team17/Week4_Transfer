@@ -1,21 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import type { FC } from 'react'
 import Avatar from 'components/Avatar'
 import styled from 'styled-components'
 import colors from 'styles/colors'
-import getAPI from 'api'
 import fileSize from 'filesize'
 import { DataInterface } from 'common/interface'
 import { Link } from 'react-router-dom'
+import { useDataState } from 'contextAPI'
 
 const LinkPage: FC = () => {
-  const [datas, setDatas] = useState<DataInterface[]>()
-
-  useEffect(() => {
-    getAPI().then((res) => {
-      setDatas(res)
-    })
-  }, [])
+  const datas = useDataState()
 
   return (
     <>
@@ -42,6 +36,8 @@ export default LinkPage
 const EXPIRED = '유효기간 만료'
 
 const TableData = (data: DataInterface) => {
+  const copyUrl = `${window.location.href}${data.key}`
+
   const handleImgError = (e: any) => {
     e.target.src = '/svgs/default.svg'
   }
@@ -84,11 +80,10 @@ const TableData = (data: DataInterface) => {
 
             <LinkUrl
               onClick={() => {
-                handleUrlCopy(data.summary, `http://sdas+${data.key}`)
+                handleUrlCopy(data.summary, copyUrl)
               }}
             >
-              {window.location.href}
-              {data.key}
+              {copyUrl}
             </LinkUrl>
           </LinkTexts>
         </LinkInfo>
