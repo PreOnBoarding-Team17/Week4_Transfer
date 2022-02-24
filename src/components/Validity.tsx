@@ -14,6 +14,11 @@ const Validity: React.FC<ValidityProps> = ({ date }) => {
   const [expired, setExpired] = useState<boolean>(false);
   const inputValidity = new Date(date * 1000);
 
+  const getDiffDays = (date: Date): number => {
+    const diff = date.getTime() - new Date().getTime();
+    return Math.floor(diff / (1000 * 60 * 60 * 24));
+  };
+
   const getDiffHours = (date: Date): number => {
     const diff = date.getTime() - new Date().getTime();
     return Math.floor(diff / (1000 * 60 * 60));
@@ -24,12 +29,8 @@ const Validity: React.FC<ValidityProps> = ({ date }) => {
     return Math.floor(diff / (1000 * 60));
   };
 
-  const getDiffDays = (date: Date): number => {
-    const diff = date.getTime() - new Date().getTime();
-    return Math.floor(diff / (1000 * 60 * 60 * 24));
-  };
-
   useEffect(() => {
+    console.log(date);
     if (new Date().getTime() - date * 1000 < 0) {
       if (getDiffHours(inputValidity) >= 48) {
         setDays(getDiffDays(inputValidity));
@@ -50,10 +51,10 @@ const Validity: React.FC<ValidityProps> = ({ date }) => {
   useEffect(() => {
     if (days === -1 || expired) {
       const interval: NodeJS.Timer = setInterval(() => {
-        if (
-          new Date().getTime() - date * 1000 < 0 &&
-          getDiffHours(inputValidity) <= 48
-        ) {
+        if (new Date().getTime() - date * 1000 < 0) {
+          if (getDiffHours(inputValidity) >= 48) {
+            clearInterval(interval);
+          }
           setValid(
             `${getDiffHours(inputValidity)}시간 ${
               getDiffMinutes(inputValidity) - getDiffHours(inputValidity) * 60
