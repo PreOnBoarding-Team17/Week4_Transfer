@@ -42,6 +42,7 @@ const GlobalStyle = createGlobalStyle`
   }
 
   a {
+    color: ${colors.grey700};
     text-decoration: none
   }
   a:visited {
