@@ -248,9 +248,12 @@ const TableCell = styled.th<TableCellProps>`
   vertical-align: inherit;
   border-bottom: 1px solid ${colors.grey300};
   text-align: ${({ textAlign }) => textAlign || 'center'};
-  border: 2px solid ${colors.grey200};
   padding: 16px;
   ${({ receiver }) => receiver && `max-width: 150px;`}
+
+  @media (max-width: 768px) {
+    ${({ receiver }) => receiver && `max-width: 100%;`}
+  }
 `;
 
 const LinkInfo = styled.div`
@@ -301,5 +304,11 @@ const LinkReceivers = styled.div`
 
   & > * + * {
     margin-left: 8px;
+  }
+
+  @media (max-width: 768px) {
+    & + & {
+      margin-left: 8px;
+    }
   }
 `;
