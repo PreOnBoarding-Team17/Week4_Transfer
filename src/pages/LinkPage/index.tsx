@@ -107,9 +107,9 @@ const TableData = (data: DataInterface) => {
       </TableCell>
       <TableCell>
         <span>받은사람</span>
-        {data.sent?.emails.map((email) => (
-          <LinkReceivers key={email}>
-            <Avatar text={email} />
+        {new Array(data.download_count).fill(0).map((el, index) => (
+          <LinkReceivers key={index}>
+            <Avatar text={(index + 10).toString(32)} />
           </LinkReceivers>
         ))}
       </TableCell>
