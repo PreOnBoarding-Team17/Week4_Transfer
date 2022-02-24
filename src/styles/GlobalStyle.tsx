@@ -1,6 +1,6 @@
-import { createGlobalStyle } from 'styled-components'
-import normalize from 'styled-normalize'
-import colors from 'styles/colors'
+import { createGlobalStyle } from 'styled-components';
+import normalize from 'styled-normalize';
+import colors from 'styles/colors';
 
 const GlobalStyle = createGlobalStyle`
   ${normalize}
@@ -51,6 +51,6 @@ const GlobalStyle = createGlobalStyle`
     color: ${colors.teal700};
   }
 
-`
+`;
 
-export default GlobalStyle
+export default GlobalStyle;
