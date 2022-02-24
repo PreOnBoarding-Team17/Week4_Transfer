@@ -1,7 +1,7 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from 'App'
-import { DataProvider } from 'contextAPI'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from 'App';
+import { DataProvider } from 'contextAPI';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -9,5 +9,5 @@ ReactDOM.render(
       <App />
     </DataProvider>
   </React.StrictMode>,
-  document.getElementById('root'),
-)
+  document.getElementById('root')
+);

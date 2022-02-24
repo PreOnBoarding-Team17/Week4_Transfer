@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 
 interface ValidityProps {
   date: number;
 }
 
-// 1645710715
-// 1645833600
-// 1646092800
-
 const Validity: React.FC<ValidityProps> = ({ date }) => {
-  const [valid, setValid] = useState<string>("");
+  const [valid, setValid] = useState<string>('');
   const [days, setDays] = useState<number>(-1);
   const [expired, setExpired] = useState<boolean>(false);
   const inputValidity = new Date(date * 1000);
@@ -30,7 +26,6 @@ const Validity: React.FC<ValidityProps> = ({ date }) => {
   };
 
   useEffect(() => {
-    console.log(date);
     if (new Date().getTime() - date * 1000 < 0) {
       if (getDiffHours(inputValidity) >= 48) {
         setDays(getDiffDays(inputValidity));
@@ -44,7 +39,7 @@ const Validity: React.FC<ValidityProps> = ({ date }) => {
       }
     } else {
       setExpired(true);
-      setValid("만료됨");
+      setValid('만료됨');
     }
   }, [date]);
 
@@ -61,7 +56,7 @@ const Validity: React.FC<ValidityProps> = ({ date }) => {
               }분`
             );
         } else {
-          setValid("만료됨");
+          setValid('만료됨');
           clearInterval(interval);
         }
       }, 10000);

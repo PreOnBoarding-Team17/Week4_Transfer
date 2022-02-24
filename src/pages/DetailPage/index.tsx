@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import type { FC } from "react";
-import styled from "styled-components";
-import colors from "styles/colors";
-import Button from "components/Button";
-import { useParams } from "react-router-dom";
-import { useDataState } from "contextAPI";
-import { DataInterface } from "common/interface";
-import fileSize from "filesize";
+import React, { useEffect, useState } from 'react';
+import type { FC } from 'react';
+import styled from 'styled-components';
+import colors from 'styles/colors';
+import Button from 'components/Button';
+import { useParams } from 'react-router-dom';
+import { useDataState } from 'contextAPI';
+import { DataInterface } from 'common/interface';
+import fileSize from 'filesize';
 
 const DetailPage: FC = () => {
   const { key } = useParams();
@@ -46,7 +46,7 @@ const DetailPage: FC = () => {
               <Title>{data.sent?.subject}</Title>
               <Url>{data.thumbnailUrl}</Url>
             </LinkInfo>
-            <DownloadButton onClick={() => alert("다운로드 되었습니다.")}>
+            <DownloadButton onClick={() => alert('다운로드 되었습니다.')}>
               <img
                 referrerPolicy="no-referrer"
                 src="/svgs/download.svg"
@@ -201,9 +201,9 @@ const Image = styled.span<{ image: string }>`
   width: 120px;
   display: inline-block;
   background-image: ${(props) =>
-    props.image.slice(-3) !== "svg"
+    props.image.slice(-3) !== 'svg'
       ? `url(${props.image})`
-      : "url(/svgs/default.svg)"};
+      : 'url(/svgs/default.svg)'};
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
