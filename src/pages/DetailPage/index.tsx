@@ -6,6 +6,7 @@ import Button from "components/Button";
 import { useParams } from "react-router-dom";
 import { useDataState } from "contextAPI";
 import { DataInterface } from "common/interface";
+import fileSize from "filesize";
 
 const DetailPage: FC = () => {
   const { key } = useParams();
@@ -16,6 +17,7 @@ const DetailPage: FC = () => {
   useEffect(() => {
     setData(datas.filter((data) => data.key === key)[0]);
   }, []);
+  console.log(data);
 
   const handleDownload = () => {
     alert("다운로드 되었습니다.");
@@ -24,8 +26,8 @@ const DetailPage: FC = () => {
     <>
       <Header>
         <LinkInfo>
-          <Title>안녕</Title>
-          <Url>안녕</Url>
+          <Title>{data?.sent?.subject}</Title>
+          <Url>{data?.thumbnailUrl}</Url>
         </LinkInfo>
         <DownloadButton onClick={handleDownload}>
           <img referrerPolicy="no-referrer" src="/svgs/download.svg" alt="" />
@@ -38,26 +40,29 @@ const DetailPage: FC = () => {
             <Top>링크 생성일</Top>
             <Bottom>2022년 1월 12일 22:36 +09:00</Bottom>
             <Top>메세지</Top>
-            <Bottom>안녕</Bottom>
+            <Bottom>{data?.sent?.content}</Bottom>
             <Top>다운로드 횟수</Top>
-            <Bottom>안녕</Bottom>
+            <Bottom>{data?.download_count}</Bottom>
           </Texts>
           <LinkImage>
             <Image />
           </LinkImage>
         </Descrition>
         <ListSummary>
-          <div>총 1개의 파일</div>
+          <div>총 {data?.files.length}개의 파일</div>
           <div>10.86KB</div>
         </ListSummary>
         <FileList>
-          <FileListItem>
-            <FileItemInfo>
-              <span />
-              <span>안녕</span>
-            </FileItemInfo>
-            <FileItemSize>10.92KB</FileItemSize>
-          </FileListItem>
+          {data &&
+            data.files.map((element, index) => (
+              <FileListItem key={index}>
+                <FileItemInfo>
+                  <span />
+                  <span>{element.name}</span>
+                </FileItemInfo>
+                <FileItemSize>{fileSize(element.size)}</FileItemSize>
+              </FileListItem>
+            ))}
         </FileList>
       </Article>
     </>
