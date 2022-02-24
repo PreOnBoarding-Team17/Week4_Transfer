@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, SyntheticEvent } from 'react';
 import type { FC } from 'react';
 import Avatar from 'components/Avatar';
 import styled from 'styled-components';
@@ -38,16 +38,21 @@ const EXPIRED = '유효기간 만료';
 
 const TableData = (data: DataInterface) => {
   const copyUrl = `${window.location.href}${data.key}`;
+  const expireState =
+    (data.expires_at + 2700000) * 1000 - new Date().getTime() > 0
+      ? false
+      : true;
 
-  const handleImgError = (e: any) => {
-    e.target.src = '/svgs/default.svg';
+  const handleImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    const target = e.target as HTMLImageElement;
+    target.src = '/svgs/default.svg';
   };
 
-  const handleUrlCopy = (text: string, copyUrl: string) => {
-    text !== EXPIRED &&
+  const handleUrlCopy = (copyUrl: string) => {
+    copyUrl !== EXPIRED &&
       navigator.clipboard &&
       navigator.clipboard.writeText(copyUrl).then(() => {
-        alert(data.summary + ' 가 복사되었습니다.');
+        alert(data.summary + ' 주소가 복사되었습니다.');
       });
   };
 
@@ -81,37 +86,61 @@ const TableData = (data: DataInterface) => {
 
             <LinkUrl
               onClick={() => {
-                handleUrlCopy(data.summary, copyUrl);
+                expireState ? handleUrlCopy(EXPIRED) : handleUrlCopy(copyUrl);
               }}
+              expired={expireState}
             >
-              {copyUrl}
+              {expireState ? '만료됨' : copyUrl}
             </LinkUrl>
           </LinkTexts>
         </LinkInfo>
         <span />
       </TableCell>
+
       <TableCell textAlign="center">
         <span>파일개수</span>
-        <span>{data.count.toLocaleString('en')}</span>
+        <Link
+          to={{
+            pathname: `/${data.key}`,
+          }}
+        >
+          <span>{data.count.toLocaleString('en')}</span>
+        </Link>
       </TableCell>
       <TableCell>
         <span>파일사이즈</span>
-        <span>
-          {fileSize(data.files.reduce((acc, cur) => acc + cur.size, 0))}
-        </span>
+        <Link
+          to={{
+            pathname: `/${data.key}`,
+          }}
+        >
+          <span>{fileSize(data.size)}</span>
+        </Link>
       </TableCell>
       <TableCell>
         <span>유효기간</span>
-        {/* <span>{data.expires_at}</span> */}
-        <Validity date={data.expires_at + 2700000} />
+        <Link
+          to={{
+            pathname: `/${data.key}`,
+          }}
+        >
+          {/* <span>{data.expires_at}</span> */}
+          <Validity date={data.expires_at + 2700000} />
+        </Link>
       </TableCell>
       <TableCell>
         <span>받은사람</span>
-        {new Array(data.download_count).fill(0).map((el, index) => (
-          <LinkReceivers key={index}>
-            <Avatar text={(index + 10).toString(32)} />
-          </LinkReceivers>
-        ))}
+        <Link
+          to={{
+            pathname: `/${data.key}`,
+          }}
+        >
+          {new Array(data.download_count).fill(0).map((el, index) => (
+            <LinkReceivers key={index}>
+              <Avatar text={(index + 10).toString(32)} />
+            </LinkReceivers>
+          ))}
+        </Link>
       </TableCell>
     </TableRow>
   );
@@ -212,7 +241,7 @@ const TableCell = styled.th<TableCellProps>`
   display: table-cell;
   vertical-align: inherit;
   border-bottom: 1px solid ${colors.grey300};
-  text-align: ${(props) => props.textAlign || 'center'};
+  text-align: ${({ textAlign }) => textAlign || 'center'};
   border: 2px solid ${colors.grey200};
   padding: 16px;
 `;
@@ -248,14 +277,16 @@ const LinkTitle = styled.p`
   font-size: 16px;
   font-weight: 500;
   color: ${colors.grey700};
-`;
-
-const LinkUrl = styled.a`
-  text-decoration: underline;
-
-  :hover {
+  &:hover {
     color: ${colors.teal700};
   }
+`;
+
+interface LinkUrlProps {
+  expired?: boolean;
+}
+const LinkUrl = styled.a<LinkUrlProps>`
+  text-decoration: ${({ expired }) => (expired ? 'line-through' : 'underline')};
 `;
 
 const LinkReceivers = styled.div`
