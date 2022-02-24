@@ -128,7 +128,7 @@ const TableData = (data: DataInterface) => {
           <Validity date={data.expires_at + 2700000} />
         </Link>
       </TableCell>
-      <TableCell>
+      <TableCell receiver>
         <span>받은사람</span>
         <Link
           to={{
@@ -232,6 +232,7 @@ const TableRow = styled.tr`
 `;
 interface TableCellProps {
   textAlign?: string;
+  receiver?: boolean;
 }
 const TableCell = styled.th<TableCellProps>`
   font-weight: inherit;
@@ -244,6 +245,7 @@ const TableCell = styled.th<TableCellProps>`
   text-align: ${({ textAlign }) => textAlign || 'center'};
   border: 2px solid ${colors.grey200};
   padding: 16px;
+  ${({ receiver }) => receiver && `max-width: 150px;`}
 `;
 
 const LinkInfo = styled.div`
