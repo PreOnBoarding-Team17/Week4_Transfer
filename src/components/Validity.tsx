@@ -4,10 +4,6 @@ interface ValidityProps {
   date: number
 }
 
-// 1645710715
-// 1645833600
-// 1646092800
-
 const Validity: React.FC<ValidityProps> = ({ date }) => {
   const [valid, setValid] = useState<string>('')
   const [days, setDays] = useState<number>(-1)
@@ -53,12 +49,12 @@ const Validity: React.FC<ValidityProps> = ({ date }) => {
         if (new Date().getTime() - date * 1000 < 0) {
           if (getDiffHours(inputValidity) >= 48) {
             clearInterval(interval)
-          }
-          setValid(
-            `${getDiffHours(inputValidity)}시간 ${
-              getDiffMinutes(inputValidity) - getDiffHours(inputValidity) * 60
-            }분`,
-          )
+          } else
+            setValid(
+              `${getDiffHours(inputValidity)}시간 ${
+                getDiffMinutes(inputValidity) - getDiffHours(inputValidity) * 60
+              }분`,
+            )
         } else {
           setValid('만료됨')
           clearInterval(interval)
