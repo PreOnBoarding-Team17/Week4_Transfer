@@ -128,20 +128,19 @@ const TableData = (data: DataInterface) => {
           <Validity date={data.expires_at + 2700000} />
         </CustomLink>
       </TableCell>
-      <TableCell>
+      <TableCell receiver>
         <span>받은사람</span>
-        {data.sent?.emails.map((email) => (
-          <CustomLink
-            key={email}
-            to={{
-              pathname: `/${data.key}`,
-            }}
-          >
-            <LinkReceivers>
-              <Avatar text={email} />
+        <CustomLink
+          to={{
+            pathname: `/${data.key}`,
+          }}
+        >
+          {new Array(data.download_count).fill(0).map((el, index) => (
+            <LinkReceivers key={index + el}>
+              <Avatar text={(index + 10).toString(32)} />
             </LinkReceivers>
-          </CustomLink>
-        ))}
+          ))}
+        </CustomLink>
       </TableCell>
     </TableRow>
   );
@@ -238,6 +237,7 @@ const TableRow = styled.tr`
 `;
 interface TableCellProps {
   textAlign?: string;
+  receiver?: boolean;
 }
 const TableCell = styled.th<TableCellProps>`
   font-weight: inherit;
@@ -250,6 +250,7 @@ const TableCell = styled.th<TableCellProps>`
   text-align: ${({ textAlign }) => textAlign || 'center'};
   border: 2px solid ${colors.grey200};
   padding: 16px;
+  ${({ receiver }) => receiver && `max-width: 150px;`}
 `;
 
 const LinkInfo = styled.div`
