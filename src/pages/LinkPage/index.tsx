@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, SyntheticEvent } from 'react'
 import type { FC } from 'react'
 import Avatar from 'components/Avatar'
 import styled from 'styled-components'
@@ -10,6 +10,7 @@ import { useDataState } from 'contextAPI'
 
 const LinkPage: FC = () => {
   const datas = useDataState()
+  console.log(datas)
 
   return (
     <>
@@ -38,15 +39,16 @@ const EXPIRED = '유효기간 만료'
 const TableData = (data: DataInterface) => {
   const copyUrl = `${window.location.href}${data.key}`
 
-  const handleImgError = (e: any) => {
-    e.target.src = '/svgs/default.svg'
+  const handleImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
+    const target = e.target as HTMLImageElement
+    target.src = '/svgs/default.svg'
   }
 
   const handleUrlCopy = (text: string, copyUrl: string) => {
     text !== EXPIRED &&
       navigator.clipboard &&
       navigator.clipboard.writeText(copyUrl).then(() => {
-        alert(data.summary + ' 가 복사되었습니다.')
+        alert(data.summary + ' 주소가 복사되었습니다.')
       })
   }
 
@@ -89,26 +91,50 @@ const TableData = (data: DataInterface) => {
         </LinkInfo>
         <span />
       </TableCell>
+
       <TableCell textAlign="center">
         <span>파일개수</span>
-        <span>{data.count.toLocaleString('en')}</span>
+        <Link
+          to={{
+            pathname: `/${data.key}`,
+          }}
+        >
+          <span>{data.count.toLocaleString('en')}</span>
+        </Link>
       </TableCell>
       <TableCell>
         <span>파일사이즈</span>
-        <span>
-          {fileSize(data.files.reduce((acc, cur) => acc + cur.size, 0))}
-        </span>
+        <Link
+          to={{
+            pathname: `/${data.key}`,
+          }}
+        >
+          <span>{fileSize(data.size)}</span>
+        </Link>
       </TableCell>
       <TableCell>
         <span>유효기간</span>
-        <span>{data.expires_at}</span>
+        <Link
+          to={{
+            pathname: `/${data.key}`,
+          }}
+        >
+          <span>{data.expires_at}</span>
+        </Link>
       </TableCell>
       <TableCell>
         <span>받은사람</span>
         {data.sent?.emails.map((email) => (
-          <LinkReceivers key={email}>
-            <Avatar text={email} />
-          </LinkReceivers>
+          <Link
+            key={email}
+            to={{
+              pathname: `/${data.key}`,
+            }}
+          >
+            <LinkReceivers>
+              <Avatar text={email} />
+            </LinkReceivers>
+          </Link>
         ))}
       </TableCell>
     </TableRow>
