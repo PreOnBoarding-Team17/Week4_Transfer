@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import type { FC } from 'react'
-import styled from 'styled-components'
-import colors from 'styles/colors'
-import Button from 'components/Button'
-import { useParams } from 'react-router-dom'
-import { useDataState } from 'contextAPI'
-import { DataInterface } from 'common/interface'
+import React, { useEffect, useState } from 'react';
+import type { FC } from 'react';
+import styled from 'styled-components';
+import colors from 'styles/colors';
+import Button from 'components/Button';
+import { useParams } from 'react-router-dom';
+import { useDataState } from 'contextAPI';
+import { DataInterface } from 'common/interface';
 
 const DetailPage: FC = () => {
-  const { key } = useParams()
-  const datas = useDataState()
+  const { key } = useParams();
+  const datas = useDataState();
 
-  const [data, setData] = useState<DataInterface | null>(null)
+  const [data, setData] = useState<DataInterface | null>(null);
 
   useEffect(() => {
-    setData(datas.filter((data) => data.key === key)[0])
-  }, [])
+    setData(datas.filter((data) => data.key === key)[0]);
+  }, []);
 
   return (
     <>
@@ -58,19 +58,19 @@ const DetailPage: FC = () => {
         </FileList>
       </Article>
     </>
-  )
-}
+  );
+};
 
 const Header = styled.header`
   display: flex;
   color: ${colors.grey600};
   margin-bottom: 32px;
-`
+`;
 
 const LinkInfo = styled.div`
   overflow: hidden;
   flex-grow: 1;
-`
+`;
 
 const Title = styled.h3`
   margin: 0;
@@ -80,7 +80,7 @@ const Title = styled.h3`
   line-height: 28px;
   color: ${colors.grey700};
   font-size: 20px;
-`
+`;
 
 const Url = styled.a`
   overflow: hidden;
@@ -94,7 +94,7 @@ const Url = styled.a`
   :hover {
     color: ${colors.teal700};
   }
-`
+`;
 
 const DownloadButton = styled(Button)`
   font-size: 16px;
@@ -102,7 +102,7 @@ const DownloadButton = styled(Button)`
   img {
     margin-right: 8px;
   }
-`
+`;
 
 const Article = styled.article`
   border-radius: 4px;
@@ -113,7 +113,7 @@ const Article = styled.article`
   color: ${colors.grey600};
   font-size: 14px;
   font-weight: 400;
-`
+`;
 
 const Descrition = styled.div`
   display: flex;
@@ -123,7 +123,7 @@ const Descrition = styled.div`
     flex-direction: column-reverse;
     padding: 24px;
   }
-`
+`;
 
 const Texts = styled.div`
   flex-grow: 0;
@@ -133,17 +133,17 @@ const Texts = styled.div`
   @media (max-width: 768px) {
     max-width: 100%;
   }
-`
+`;
 
 const Top = styled.label`
   font-weight: 600;
   line-height: 20px;
-`
+`;
 
 const Bottom = styled.p`
   color: ${colors.grey700};
   margin: 8px 0 24px;
-`
+`;
 
 const LinkImage = styled.div`
   flex-grow: 0;
@@ -164,7 +164,7 @@ const LinkImage = styled.div`
     margin-bottom: 32px;
     max-width: 100%;
   }
-`
+`;
 
 const Image = styled.span`
   width: 120px;
@@ -174,7 +174,7 @@ const Image = styled.span`
   background-repeat: no-repeat;
   background-position: center center;
   padding-bottom: 100%;
-`
+`;
 
 const ListSummary = styled.div`
   display: flex;
@@ -187,7 +187,7 @@ const ListSummary = styled.div`
   @media (max-width: 768px) {
     padding: 12px 24px;
   }
-`
+`;
 
 const FileList = styled.ul`
   border-top: 1px solid;
@@ -205,14 +205,14 @@ const FileList = styled.ul`
     border-top: 1px solid;
     border-color: ${colors.grey200};
   }
-`
+`;
 
 const FileListItem = styled.li`
   height: 72px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-`
+`;
 
 const FileItemInfo = styled.div`
   flex-grow: 0;
@@ -231,8 +231,8 @@ const FileItemInfo = styled.div`
     background-repeat: no-repeat;
     background-position: center center;
   }
-`
+`;
 
-const FileItemSize = styled.div``
+const FileItemSize = styled.div``;
 
-export default DetailPage
+export default DetailPage;
