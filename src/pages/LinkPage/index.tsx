@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react'
-import type { FC } from 'react'
-import Avatar from 'components/Avatar'
-import styled from 'styled-components'
-import colors from 'styles/colors'
-import fileSize from 'filesize'
-import { DataInterface } from 'common/interface'
-import { Link } from 'react-router-dom'
-import { useDataState } from 'contextAPI'
+import React, { useState, useEffect, useContext } from "react";
+import type { FC } from "react";
+import Avatar from "components/Avatar";
+import styled from "styled-components";
+import colors from "styles/colors";
+import fileSize from "filesize";
+import { DataInterface } from "common/interface";
+import { Link } from "react-router-dom";
+import { useDataState } from "contextAPI";
+import Validity from "components/Validity";
 
 const LinkPage: FC = () => {
-  const datas = useDataState()
+  const datas = useDataState();
 
   return (
     <>
@@ -28,27 +29,27 @@ const LinkPage: FC = () => {
         <TableBody>{datas?.map((data) => TableData(data))}</TableBody>
       </Table>
     </>
-  )
-}
+  );
+};
 
-export default LinkPage
+export default LinkPage;
 
-const EXPIRED = '유효기간 만료'
+const EXPIRED = "유효기간 만료";
 
 const TableData = (data: DataInterface) => {
-  const copyUrl = `${window.location.href}${data.key}`
+  const copyUrl = `${window.location.href}${data.key}`;
 
   const handleImgError = (e: any) => {
-    e.target.src = '/svgs/default.svg'
-  }
+    e.target.src = "/svgs/default.svg";
+  };
 
   const handleUrlCopy = (text: string, copyUrl: string) => {
     text !== EXPIRED &&
       navigator.clipboard &&
       navigator.clipboard.writeText(copyUrl).then(() => {
-        alert(data.summary + ' 가 복사되었습니다.')
-      })
-  }
+        alert(data.summary + " 가 복사되었습니다.");
+      });
+  };
 
   return (
     <TableRow key={data.key}>
@@ -80,7 +81,7 @@ const TableData = (data: DataInterface) => {
 
             <LinkUrl
               onClick={() => {
-                handleUrlCopy(data.summary, copyUrl)
+                handleUrlCopy(data.summary, copyUrl);
               }}
             >
               {copyUrl}
@@ -91,7 +92,7 @@ const TableData = (data: DataInterface) => {
       </TableCell>
       <TableCell textAlign="center">
         <span>파일개수</span>
-        <span>{data.count.toLocaleString('en')}</span>
+        <span>{data.count.toLocaleString("en")}</span>
       </TableCell>
       <TableCell>
         <span>파일사이즈</span>
@@ -101,7 +102,8 @@ const TableData = (data: DataInterface) => {
       </TableCell>
       <TableCell>
         <span>유효기간</span>
-        <span>{data.expires_at}</span>
+        {/* <span>{data.expires_at}</span> */}
+        <Validity date={data.expires_at} />
       </TableCell>
       <TableCell>
         <span>받은사람</span>
@@ -112,15 +114,15 @@ const TableData = (data: DataInterface) => {
         ))}
       </TableCell>
     </TableRow>
-  )
-}
+  );
+};
 
 const Title = styled.h2`
   color: ${colors.grey700};
   letter-spacing: -0.62px;
   word-break: keep-all;
   margin: 0;
-`
+`;
 
 const Table = styled.table`
   margin-top: 24px;
@@ -134,7 +136,7 @@ const Table = styled.table`
   border-collapse: collapse;
   border-spacing: 0px;
   color: ${colors.grey600};
-`
+`;
 
 const TableHead = styled.thead`
   font-weight: 600;
@@ -143,7 +145,7 @@ const TableHead = styled.thead`
   @media (max-width: 768px) {
     display: none;
   }
-`
+`;
 
 const TableBody = styled.tbody`
   font-weight: 400;
@@ -189,7 +191,7 @@ const TableBody = styled.tbody`
       }
     }
   }
-`
+`;
 
 const TableRow = styled.tr`
   color: inherit;
@@ -198,9 +200,9 @@ const TableRow = styled.tr`
   outline: 0px;
   font-weight: inherit;
   font-size: inherit;
-`
+`;
 interface TableCellProps {
-  textAlign?: string
+  textAlign?: string;
 }
 const TableCell = styled.th<TableCellProps>`
   font-weight: inherit;
@@ -210,15 +212,15 @@ const TableCell = styled.th<TableCellProps>`
   display: table-cell;
   vertical-align: inherit;
   border-bottom: 1px solid ${colors.grey300};
-  text-align: ${(props) => props.textAlign || 'center'};
+  text-align: ${(props) => props.textAlign || "center"};
   border: 2px solid ${colors.grey200};
   padding: 16px;
-`
+`;
 
 const LinkInfo = styled.div`
   display: flex;
   align-items: center;
-`
+`;
 
 const LinkImage = styled.div`
   width: 40px;
@@ -230,7 +232,7 @@ const LinkImage = styled.div`
   img {
     border-radius: 4px;
   }
-`
+`;
 
 const LinkTexts = styled.div`
   display: flex;
@@ -240,13 +242,13 @@ const LinkTexts = styled.div`
   & > * {
     margin: 0;
   }
-`
+`;
 
 const LinkTitle = styled.p`
   font-size: 16px;
   font-weight: 500;
   color: ${colors.grey700};
-`
+`;
 
 const LinkUrl = styled.a`
   text-decoration: underline;
@@ -254,7 +256,7 @@ const LinkUrl = styled.a`
   :hover {
     color: ${colors.teal700};
   }
-`
+`;
 
 const LinkReceivers = styled.div`
   display: inline-flex;
@@ -262,4 +264,4 @@ const LinkReceivers = styled.div`
   & > * + * {
     margin-left: 8px;
   }
-`
+`;
