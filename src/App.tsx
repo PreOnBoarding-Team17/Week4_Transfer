@@ -10,8 +10,8 @@ function App() {
     <>
       <GlobalStyle />
       <Container>
-        <LinkPage />
-        {/* <DetailPage /> */}
+        {/* <LinkPage /> */}
+        <DetailPage />
       </Container>
     </>
   );

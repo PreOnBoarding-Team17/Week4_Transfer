@@ -1,18 +1,62 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import type { FC } from "react";
 import styled from "styled-components";
 import colors from "styles/colors";
 import Button from "components/Button";
+import getAPI from "api";
+
+interface DataInterface {
+  count: number;
+  created_at: number;
+  download_count: number;
+  expires_at: number;
+  files: Array<FileInterface>;
+  key: string | undefined;
+  size: number;
+  summary: string;
+  thumbnailUrl: string;
+  sent?: SentInterface;
+}
+
+interface FileInterface {
+  key: string;
+  name: string;
+  size: number;
+  thumbnailUrl: string;
+}
+
+interface SentInterface {
+  subject: string;
+  content: string;
+  emails: string[];
+}
 
 const DetailPage: FC = () => {
+  const [data, setData] = useState<DataInterface[]>([]);
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const datas = await getAPI();
+        setData(datas);
+      } catch (event) {
+        console.log(event);
+      }
+    };
+    getData();
+  }, []);
+
+  const handleDownload = () => {
+    alert("다운로드 되었습니다.");
+  };
+
   return (
     <>
       <Header>
         <LinkInfo>
-          <Title>로고파일</Title>
-          <Url>localhost/7LF4MDLY</Url>
+          <Title>{data[3].sent?.subject}</Title>
+          <Url>{data[3].thumbnailUrl}</Url>
         </LinkInfo>
-        <DownloadButton>
+        <DownloadButton onClick={handleDownload}>
           <img referrerPolicy="no-referrer" src="/svgs/download.svg" alt="" />
           받기
         </DownloadButton>
@@ -23,9 +67,9 @@ const DetailPage: FC = () => {
             <Top>링크 생성일</Top>
             <Bottom>2022년 1월 12일 22:36 +09:00</Bottom>
             <Top>메세지</Top>
-            <Bottom>로고파일 전달 드립니다.</Bottom>
+            <Bottom>{data[3].sent?.content}</Bottom>
             <Top>다운로드 횟수</Top>
-            <Bottom>1</Bottom>
+            <Bottom>{data[3].download_count}</Bottom>
           </Texts>
           <LinkImage>
             <Image />
@@ -36,13 +80,15 @@ const DetailPage: FC = () => {
           <div>10.86KB</div>
         </ListSummary>
         <FileList>
-          <FileListItem>
-            <FileItemInfo>
-              <span />
-              <span>logo.png</span>
-            </FileItemInfo>
-            <FileItemSize>10.86KB</FileItemSize>
-          </FileListItem>
+          {data[3].files.map((element, index) => (
+            <FileListItem key={index}>
+              <FileItemInfo>
+                <span />
+                <span>{element.name}</span>
+              </FileItemInfo>
+              <FileItemSize>{element.size}KB</FileItemSize>
+            </FileListItem>
+          ))}
         </FileList>
       </Article>
     </>
@@ -86,7 +132,7 @@ const Url = styled.a`
 
 const DownloadButton = styled(Button)`
   font-size: 16px;
-
+  cursor: pointer;
   img {
     margin-right: 8px;
   }
