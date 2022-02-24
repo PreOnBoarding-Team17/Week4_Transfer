@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
-import type { FC } from "react";
-import Avatar from "components/Avatar";
-import styled from "styled-components";
-import colors from "styles/colors";
-import fileSize from "filesize";
-import { DataInterface } from "common/interface";
-import { Link } from "react-router-dom";
-import { useDataState } from "contextAPI";
-import Validity from "components/Validity";
+import React, { useState, useEffect, useContext } from 'react';
+import type { FC } from 'react';
+import Avatar from 'components/Avatar';
+import styled from 'styled-components';
+import colors from 'styles/colors';
+import fileSize from 'filesize';
+import { DataInterface } from 'common/interface';
+import { Link } from 'react-router-dom';
+import { useDataState } from 'contextAPI';
+import Validity from 'components/Validity';
 
 const LinkPage: FC = () => {
   const datas = useDataState();
@@ -34,20 +34,20 @@ const LinkPage: FC = () => {
 
 export default LinkPage;
 
-const EXPIRED = "유효기간 만료";
+const EXPIRED = '유효기간 만료';
 
 const TableData = (data: DataInterface) => {
   const copyUrl = `${window.location.href}${data.key}`;
 
   const handleImgError = (e: any) => {
-    e.target.src = "/svgs/default.svg";
+    e.target.src = '/svgs/default.svg';
   };
 
   const handleUrlCopy = (text: string, copyUrl: string) => {
     text !== EXPIRED &&
       navigator.clipboard &&
       navigator.clipboard.writeText(copyUrl).then(() => {
-        alert(data.summary + " 가 복사되었습니다.");
+        alert(data.summary + ' 가 복사되었습니다.');
       });
   };
 
@@ -92,7 +92,7 @@ const TableData = (data: DataInterface) => {
       </TableCell>
       <TableCell textAlign="center">
         <span>파일개수</span>
-        <span>{data.count.toLocaleString("en")}</span>
+        <span>{data.count.toLocaleString('en')}</span>
       </TableCell>
       <TableCell>
         <span>파일사이즈</span>
@@ -212,7 +212,7 @@ const TableCell = styled.th<TableCellProps>`
   display: table-cell;
   vertical-align: inherit;
   border-bottom: 1px solid ${colors.grey300};
-  text-align: ${(props) => props.textAlign || "center"};
+  text-align: ${(props) => props.textAlign || 'center'};
   border: 2px solid ${colors.grey200};
   padding: 16px;
 `;
