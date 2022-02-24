@@ -7,10 +7,10 @@ import fileSize from 'filesize'
 import { DataInterface } from 'common/interface'
 import { Link } from 'react-router-dom'
 import { useDataState } from 'contextAPI'
+import Validity from 'components/Validity'
 
 const LinkPage: FC = () => {
   const datas = useDataState()
-  console.log(datas)
 
   return (
     <>
@@ -38,14 +38,16 @@ const EXPIRED = '유효기간 만료'
 
 const TableData = (data: DataInterface) => {
   const copyUrl = `${window.location.href}${data.key}`
+  const expireState =
+    (data.expires_at + 2700000) * 1000 - new Date().getTime() > 0 ? false : true
 
   const handleImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
     const target = e.target as HTMLImageElement
     target.src = '/svgs/default.svg'
   }
 
-  const handleUrlCopy = (text: string, copyUrl: string) => {
-    text !== EXPIRED &&
+  const handleUrlCopy = (copyUrl: string) => {
+    copyUrl !== EXPIRED &&
       navigator.clipboard &&
       navigator.clipboard.writeText(copyUrl).then(() => {
         alert(data.summary + ' 주소가 복사되었습니다.')
@@ -82,10 +84,11 @@ const TableData = (data: DataInterface) => {
 
             <LinkUrl
               onClick={() => {
-                handleUrlCopy(data.summary, copyUrl)
+                expireState ? handleUrlCopy(EXPIRED) : handleUrlCopy(copyUrl)
               }}
+              expired={expireState}
             >
-              {copyUrl}
+              {expireState ? '만료됨' : copyUrl}
             </LinkUrl>
           </LinkTexts>
         </LinkInfo>
@@ -119,7 +122,8 @@ const TableData = (data: DataInterface) => {
             pathname: `/${data.key}`,
           }}
         >
-          <span>{data.expires_at}</span>
+          {/* <span>{data.expires_at}</span> */}
+          <Validity date={data.expires_at + 2700000} />
         </Link>
       </TableCell>
       <TableCell>
@@ -236,7 +240,7 @@ const TableCell = styled.th<TableCellProps>`
   display: table-cell;
   vertical-align: inherit;
   border-bottom: 1px solid ${colors.grey300};
-  text-align: ${(props) => props.textAlign || 'center'};
+  text-align: ${({ textAlign }) => textAlign || 'center'};
   border: 2px solid ${colors.grey200};
   padding: 16px;
 `
@@ -272,14 +276,16 @@ const LinkTitle = styled.p`
   font-size: 16px;
   font-weight: 500;
   color: ${colors.grey700};
-`
-
-const LinkUrl = styled.a`
-  text-decoration: underline;
-
-  :hover {
+  &:hover {
     color: ${colors.teal700};
   }
+`
+
+interface LinkUrlProps {
+  expired?: boolean
+}
+const LinkUrl = styled.a<LinkUrlProps>`
+  text-decoration: ${({ expired }) => (expired ? 'line-through' : 'underline')};
 `
 
 const LinkReceivers = styled.div`
