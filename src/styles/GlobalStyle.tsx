@@ -43,6 +43,7 @@ const GlobalStyle = createGlobalStyle`
 
   a {
     text-decoration: none
+    color: ${colors.grey700};
   }
   a:visited {
    color: black;
