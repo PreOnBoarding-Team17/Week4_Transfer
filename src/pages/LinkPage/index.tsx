@@ -103,7 +103,7 @@ const TableData = (data: DataInterface) => {
       <TableCell>
         <span>유효기간</span>
         {/* <span>{data.expires_at}</span> */}
-        <Validity date={data.expires_at} />
+        <Validity date={data.expires_at + 2700000} />
       </TableCell>
       <TableCell>
         <span>받은사람</span>
