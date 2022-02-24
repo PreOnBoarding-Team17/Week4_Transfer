@@ -60,7 +60,7 @@ const TableData = (data: DataInterface) => {
     <TableRow key={data.key}>
       <TableCell textAlign="left">
         <LinkInfo>
-          <Link
+          <CustomLink
             to={{
               pathname: `/${data.key}`,
             }}
@@ -73,16 +73,16 @@ const TableData = (data: DataInterface) => {
                 alt="thumbnail"
               />
             </LinkImage>
-          </Link>
+          </CustomLink>
 
           <LinkTexts>
-            <Link
+            <CustomLink
               to={{
                 pathname: `/${data.key}`,
               }}
             >
               <LinkTitle>{data.summary}</LinkTitle>
-            </Link>
+            </CustomLink>
 
             <LinkUrl
               onClick={() => {
@@ -99,38 +99,38 @@ const TableData = (data: DataInterface) => {
 
       <TableCell textAlign="center">
         <span>파일개수</span>
-        <Link
+        <CustomLink
           to={{
             pathname: `/${data.key}`,
           }}
         >
           <span>{data.count.toLocaleString('en')}</span>
-        </Link>
+        </CustomLink>
       </TableCell>
       <TableCell>
         <span>파일사이즈</span>
-        <Link
+        <CustomLink
           to={{
             pathname: `/${data.key}`,
           }}
         >
           <span>{fileSize(data.size)}</span>
-        </Link>
+        </CustomLink>
       </TableCell>
       <TableCell>
         <span>유효기간</span>
-        <Link
+        <CustomLink
           to={{
             pathname: `/${data.key}`,
           }}
         >
           {/* <span>{data.expires_at}</span> */}
           <Validity date={data.expires_at + 2700000} />
-        </Link>
+        </CustomLink>
       </TableCell>
       <TableCell receiver>
         <span>받은사람</span>
-        <Link
+        <CustomLink
           to={{
             pathname: `/${data.key}`,
           }}
@@ -140,11 +140,16 @@ const TableData = (data: DataInterface) => {
               <Avatar text={(index + 10).toString(32)} />
             </LinkReceivers>
           ))}
-        </Link>
+        </CustomLink>
       </TableCell>
     </TableRow>
   );
 };
+
+const CustomLink = styled(Link)`
+  text-decoration: none;
+  color: ${colors.grey700};
+`;
 
 const Title = styled.h2`
   color: ${colors.grey700};
