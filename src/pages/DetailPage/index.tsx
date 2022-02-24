@@ -1,35 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import type { FC } from "react";
 import styled from "styled-components";
 import colors from "styles/colors";
 import Button from "components/Button";
-import getAPI from "api";
+import { useParams } from "react-router-dom";
+import { useDataState } from "contextAPI";
 import { DataInterface } from "common/interface";
 
 const DetailPage: FC = () => {
-  const [data, setData] = useState<DataInterface[]>([]);
+  const { key } = useParams();
+  const datas = useDataState();
+
+  const [data, setData] = useState<DataInterface | null>(null);
+
   useEffect(() => {
-    const getData = async () => {
-      try {
-        const datas = await getAPI();
-        setData(datas);
-      } catch (event) {
-        console.log(event);
-      }
-    };
-    getData();
+    setData(datas.filter((data) => data.key === key)[0]);
   }, []);
 
   const handleDownload = () => {
     alert("다운로드 되었습니다.");
   };
-
   return (
     <>
       <Header>
         <LinkInfo>
-          <Title>{data[3].sent?.subject}</Title>
-          <Url>{data[3].thumbnailUrl}</Url>
+          <Title>안녕</Title>
+          <Url>안녕</Url>
         </LinkInfo>
         <DownloadButton onClick={handleDownload}>
           <img referrerPolicy="no-referrer" src="/svgs/download.svg" alt="" />
@@ -42,9 +38,9 @@ const DetailPage: FC = () => {
             <Top>링크 생성일</Top>
             <Bottom>2022년 1월 12일 22:36 +09:00</Bottom>
             <Top>메세지</Top>
-            <Bottom>{data[3].sent?.content}</Bottom>
+            <Bottom>안녕</Bottom>
             <Top>다운로드 횟수</Top>
-            <Bottom>{data[3].download_count}</Bottom>
+            <Bottom>안녕</Bottom>
           </Texts>
           <LinkImage>
             <Image />
@@ -55,15 +51,13 @@ const DetailPage: FC = () => {
           <div>10.86KB</div>
         </ListSummary>
         <FileList>
-          {data[3].files.map((element, index) => (
-            <FileListItem key={index}>
-              <FileItemInfo>
-                <span />
-                <span>{element.name}</span>
-              </FileItemInfo>
-              <FileItemSize>{element.size}KB</FileItemSize>
-            </FileListItem>
-          ))}
+          <FileListItem>
+            <FileItemInfo>
+              <span />
+              <span>안녕</span>
+            </FileItemInfo>
+            <FileItemSize>10.92KB</FileItemSize>
+          </FileListItem>
         </FileList>
       </Article>
     </>
