@@ -30,9 +30,15 @@ const Validity: React.FC<ValidityProps> = ({ date }) => {
       if (getDiffHours(inputValidity) >= 48) {
         setDays(getDiffDays(inputValidity));
         setValid(`${getDiffDays(inputValidity)}일`);
-      } else {
+      } else if (getDiffHours(inputValidity) > 0) {
         setValid(
           `${getDiffHours(inputValidity)}시간 ${
+            getDiffMinutes(inputValidity) - getDiffHours(inputValidity) * 60
+          }분`
+        );
+      } else {
+        setValid(
+          `${
             getDiffMinutes(inputValidity) - getDiffHours(inputValidity) * 60
           }분`
         );
@@ -49,12 +55,19 @@ const Validity: React.FC<ValidityProps> = ({ date }) => {
         if (new Date().getTime() - date * 1000 < 0) {
           if (getDiffHours(inputValidity) >= 48) {
             clearInterval(interval);
-          } else
+          } else if (getDiffHours(inputValidity) > 0) {
             setValid(
               `${getDiffHours(inputValidity)}시간 ${
                 getDiffMinutes(inputValidity) - getDiffHours(inputValidity) * 60
               }분`
             );
+          } else {
+            setValid(
+              `${
+                getDiffMinutes(inputValidity) - getDiffHours(inputValidity) * 60
+              }분`
+            );
+          }
         } else {
           setValid('만료됨');
           clearInterval(interval);

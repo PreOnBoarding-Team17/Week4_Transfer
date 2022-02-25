@@ -29,6 +29,7 @@ const Base = styled.div`
   font-weight: 700;
   text-transform: uppercase;
   line-height: 24px;
+  margin: 1px;
 `;
 
 const Text = styled.span`
