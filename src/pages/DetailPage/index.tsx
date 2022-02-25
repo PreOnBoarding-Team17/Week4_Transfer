@@ -49,7 +49,9 @@ const DetailPage: FC = () => {
         <>
           <Header>
             <LinkInfo>
-              <Title>{data.sent?.subject}</Title>
+              <Title>
+                {data.sent?.subject.length ? data.sent?.subject : '제목없음'}
+              </Title>
               <Url>{data.thumbnailUrl}</Url>
             </LinkInfo>
             <DownloadButton onClick={handleDownload}>
