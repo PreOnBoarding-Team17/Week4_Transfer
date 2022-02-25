@@ -114,7 +114,9 @@ const TableData = (data: DataInterface) => {
             pathname: `/${data.key}`,
           }}
         >
-          <span>{fileSize(data.size)}</span>
+          <span>
+            {fileSize(data.files.reduce((acc, cur) => acc + cur.size, 0))}
+          </span>
         </CustomLink>
       </TableCell>
       <TableCell>

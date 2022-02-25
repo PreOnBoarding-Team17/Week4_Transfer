@@ -7,12 +7,14 @@ import { useParams } from 'react-router-dom';
 import { useDataState } from 'contextAPI';
 import { DataInterface } from 'common/interface';
 import fileSize from 'filesize';
+import useExpired from 'hooks/useExpired';
 
 const DetailPage: FC = () => {
   const { key } = useParams();
   const datas = useDataState();
 
   const [data, setData] = useState<DataInterface | null>(null);
+  const expireState = useExpired(data);
 
   useEffect(() => {
     setData(datas.filter((data) => data.key === key)[0]);
@@ -37,6 +39,10 @@ const DetailPage: FC = () => {
     return fileSize(allFileSize);
   };
 
+  const handleDownload = () => {
+    if (expireState) alert('만료된 파일입니다.');
+    else alert('다운로드 되었습니다.');
+  };
   return (
     <>
       {data && (
@@ -46,7 +52,7 @@ const DetailPage: FC = () => {
               <Title>{data.sent?.subject}</Title>
               <Url>{data.thumbnailUrl}</Url>
             </LinkInfo>
-            <DownloadButton onClick={() => alert('다운로드 되었습니다.')}>
+            <DownloadButton onClick={handleDownload}>
               <img
                 referrerPolicy="no-referrer"
                 src="/svgs/download.svg"
@@ -70,11 +76,11 @@ const DetailPage: FC = () => {
               </LinkImage>
             </Descrition>
             <ListSummary>
-              <div>총 {data.files.length}개의 파일</div>
-              <div>{handleTotalFileSize()}</div>
+              <div>총 {expireState ? 0 : data.files.length}개의 파일</div>
+              <div>{expireState ? '' : handleTotalFileSize()}</div>
             </ListSummary>
             <FileList>
-              {data &&
+              {data && !expireState ? (
                 data.files.map((element, index) => (
                   <FileListItem key={index}>
                     <FileItemInfo>
@@ -83,7 +89,10 @@ const DetailPage: FC = () => {
                     </FileItemInfo>
                     <FileItemSize>{fileSize(element.size)}</FileItemSize>
                   </FileListItem>
-                ))}
+                ))
+              ) : (
+                <></>
+              )}
             </FileList>
           </Article>
         </>
