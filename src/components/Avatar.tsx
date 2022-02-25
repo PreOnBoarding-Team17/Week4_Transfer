@@ -1,7 +1,7 @@
-import React from "react";
-import type { HTMLAttributes } from "react";
-import styled from "styled-components";
-import colors from "styles/colors";
+import React from 'react';
+import type { HTMLAttributes } from 'react';
+import styled from 'styled-components';
+import colors from 'styles/colors';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   text: string;
@@ -29,6 +29,7 @@ const Base = styled.div`
   font-weight: 700;
   text-transform: uppercase;
   line-height: 24px;
+  margin: 1px;
 `;
 
 const Text = styled.span`

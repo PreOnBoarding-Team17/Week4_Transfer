@@ -1,5 +1,6 @@
-import { createGlobalStyle } from "styled-components";
-import normalize from "styled-normalize";
+import { createGlobalStyle } from 'styled-components';
+import normalize from 'styled-normalize';
+import colors from 'styles/colors';
 
 const GlobalStyle = createGlobalStyle`
   ${normalize}
@@ -38,6 +39,18 @@ const GlobalStyle = createGlobalStyle`
   code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+  }
+
+  a {
+    color: ${colors.grey700};
+    text-decoration: none
+    color: ${colors.grey700};
+  }
+  a:visited {
+   color: black;
+  }
+  a:hover {
+    color: ${colors.teal700};
   }
 
 `;
