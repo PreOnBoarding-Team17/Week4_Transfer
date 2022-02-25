@@ -33,4 +33,8 @@ export const TableCell = styled.th<TableCellProps>`
   border: 2px solid ${colors.grey200};
   padding: 16px;
   ${({ receiver }) => receiver && `max-width: 150px;`}
+  @media (max-width: 768px) {
+    border: none;
+    ${({ receiver }) => receiver && `max-width: 100%;`}
+  }
 `;
