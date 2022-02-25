@@ -80,6 +80,12 @@ export default TableDataTitle;
 const LinkInfo = styled.div`
   display: flex;
   align-items: center;
+
+  @media (max-width: 768px) {
+    & + & {
+      margin-left: 8px;
+    }
+  }
 `;
 
 const LinkImage = styled.div`
