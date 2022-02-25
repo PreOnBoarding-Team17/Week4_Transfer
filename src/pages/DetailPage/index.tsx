@@ -6,57 +6,97 @@ import Button from 'components/Button';
 import { useParams } from 'react-router-dom';
 import { useDataState } from 'contextAPI';
 import { DataInterface } from 'common/interface';
+import fileSize from 'filesize';
+import useExpired from 'hooks/useExpired';
 
 const DetailPage: FC = () => {
   const { key } = useParams();
   const datas = useDataState();
 
   const [data, setData] = useState<DataInterface | null>(null);
+  const expireState = useExpired(data);
 
   useEffect(() => {
     setData(datas.filter((data) => data.key === key)[0]);
   }, []);
 
+  const handleDate = (element: number) => {
+    const date = data && new Date(element * 1000);
+    const year = date?.getFullYear();
+    const month = date && date.getMonth() + 1;
+    const day = date?.getDay();
+    const hour = date?.getHours();
+    const minute = date?.getMinutes();
+    return `${year}년 ${month}월 ${day}일 ${hour}:${minute} +09:00`;
+  };
+
+  const handleTotalFileSize = () => {
+    let allFileSize = 0;
+    data &&
+      data.files.map((element) => {
+        allFileSize += element.size;
+      });
+    return fileSize(allFileSize);
+  };
+
+  const handleDownload = () => {
+    if (expireState) alert('만료된 파일입니다.');
+    else alert('다운로드 되었습니다.');
+  };
   return (
     <>
-      <Header>
-        <LinkInfo>
-          <Title>로고파일</Title>
-          <Url>localhost/7LF4MDLY</Url>
-        </LinkInfo>
-        <DownloadButton>
-          <img referrerPolicy="no-referrer" src="/svgs/download.svg" alt="" />
-          받기
-        </DownloadButton>
-      </Header>
-      <Article>
-        <Descrition>
-          <Texts>
-            <Top>링크 생성일</Top>
-            <Bottom>2022년 1월 12일 22:36 +09:00</Bottom>
-            <Top>메세지</Top>
-            <Bottom>로고파일 전달 드립니다.</Bottom>
-            <Top>다운로드 횟수</Top>
-            <Bottom>1</Bottom>
-          </Texts>
-          <LinkImage>
-            <Image />
-          </LinkImage>
-        </Descrition>
-        <ListSummary>
-          <div>총 1개의 파일</div>
-          <div>10.86KB</div>
-        </ListSummary>
-        <FileList>
-          <FileListItem>
-            <FileItemInfo>
-              <span />
-              <span>logo.png</span>
-            </FileItemInfo>
-            <FileItemSize>10.86KB</FileItemSize>
-          </FileListItem>
-        </FileList>
-      </Article>
+      {data && (
+        <>
+          <Header>
+            <LinkInfo>
+              <Title>{data.sent?.subject}</Title>
+              <Url>{data.thumbnailUrl}</Url>
+            </LinkInfo>
+            <DownloadButton onClick={handleDownload}>
+              <img
+                referrerPolicy="no-referrer"
+                src="/svgs/download.svg"
+                alt=""
+              />
+              받기
+            </DownloadButton>
+          </Header>
+          <Article>
+            <Descrition>
+              <Texts>
+                <Top>링크 생성일</Top>
+                <Bottom>{data && handleDate(data.created_at)}</Bottom>
+                <Top>메세지</Top>
+                <Bottom>{data.sent?.content}</Bottom>
+                <Top>다운로드 횟수</Top>
+                <Bottom>{data.download_count}</Bottom>
+              </Texts>
+              <LinkImage>
+                <Image image={data.thumbnailUrl} />
+              </LinkImage>
+            </Descrition>
+            <ListSummary>
+              <div>총 {expireState ? 0 : data.files.length}개의 파일</div>
+              <div>{expireState ? '' : handleTotalFileSize()}</div>
+            </ListSummary>
+            <FileList>
+              {data && !expireState ? (
+                data.files.map((element, index) => (
+                  <FileListItem key={index}>
+                    <FileItemInfo>
+                      <span />
+                      <span>{element.name}</span>
+                    </FileItemInfo>
+                    <FileItemSize>{fileSize(element.size)}</FileItemSize>
+                  </FileListItem>
+                ))
+              ) : (
+                <></>
+              )}
+            </FileList>
+          </Article>
+        </>
+      )}
     </>
   );
 };
@@ -98,7 +138,7 @@ const Url = styled.a`
 
 const DownloadButton = styled(Button)`
   font-size: 16px;
-
+  cursor: pointer;
   img {
     margin-right: 8px;
   }
@@ -166,10 +206,13 @@ const LinkImage = styled.div`
   }
 `;
 
-const Image = styled.span`
+const Image = styled.span<{ image: string }>`
   width: 120px;
   display: inline-block;
-  background-image: url(/svgs/default.svg);
+  background-image: ${(props) =>
+    props.image.slice(-3) !== 'svg'
+      ? `url(${props.image})`
+      : 'url(/svgs/default.svg)'};
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
