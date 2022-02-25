@@ -23,6 +23,7 @@ const TableDataInfo: FC<TableDataInfoProps> = ({
   downloadCount,
 }) => {
   const receiver = downloadCount ? true : false;
+
   return (
     <TableCell receiver>
       <span>{text}</span>
@@ -34,12 +35,16 @@ const TableDataInfo: FC<TableDataInfoProps> = ({
         {count && <span>{count.toLocaleString('en')}</span>}
         {fileSize && <span>{fileSize}</span>}
         {expiresAt && <Validity date={expiresAt + 2700000} />}
+
         {downloadCount &&
-          Array(downloadCount).map((el, index) => (
-            <LinkReceivers key={index + el}>
-              <Avatar text={(index + 10).toString(32)} />
-            </LinkReceivers>
-          ))}
+          downloadCount > 0 &&
+          Array(downloadCount)
+            .fill(0)
+            .map((el, index) => (
+              <LinkReceivers key={index + el}>
+                <Avatar text={(index + 10).toString(32)} />
+              </LinkReceivers>
+            ))}
       </CustomLink>
     </TableCell>
   );

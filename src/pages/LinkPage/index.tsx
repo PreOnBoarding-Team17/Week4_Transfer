@@ -10,6 +10,7 @@ const CELLTITLE = ['제목', '파일개수', '파일사이즈', '유효기간', 
 
 const LinkPage: FC = () => {
   const datas = useDataState();
+  console.log(datas);
 
   return (
     <>
