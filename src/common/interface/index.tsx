@@ -24,4 +24,4 @@ interface DataInterface {
   sent?: SentInterface;
 }
 
-export type { DataInterface };
+export type { FileInterface, DataInterface };
