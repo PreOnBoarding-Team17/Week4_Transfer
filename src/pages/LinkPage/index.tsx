@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useContext, SyntheticEvent } from 'react';
+import React from 'react';
 import type { FC } from 'react';
-import Avatar from 'components/Avatar';
 import styled from 'styled-components';
 import colors from 'styles/colors';
-import fileSize from 'filesize';
-import { DataInterface } from 'common/interface';
-import { Link } from 'react-router-dom';
+import { TableCell, TableRow } from 'common/styles';
 import { useDataState } from 'contextAPI';
-import Validity from 'components/Validity';
+import TableData from 'components/TableData';
+
+const CELLTITLE = ['제목', '파일개수', '파일사이즈', '유효기간', '받은사람'];
 
 const LinkPage: FC = () => {
   const datas = useDataState();
@@ -18,11 +17,14 @@ const LinkPage: FC = () => {
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell textAlign="left">제목</TableCell>
-            <TableCell>파일개수</TableCell>
-            <TableCell>크기</TableCell>
-            <TableCell>유효기간</TableCell>
-            <TableCell>받은사람</TableCell>
+            {CELLTITLE.map((text, index) => (
+              <TableCell
+                key={text + index}
+                textAlign={index === 0 ? 'left' : 'center'}
+              >
+                {text}
+              </TableCell>
+            ))}
           </TableRow>
         </TableHead>
 
@@ -33,125 +35,6 @@ const LinkPage: FC = () => {
 };
 
 export default LinkPage;
-
-const EXPIRED = '유효기간 만료';
-
-const TableData = (data: DataInterface) => {
-  const copyUrl = `${window.location.href}${data.key}`;
-  const expireState =
-    (data.expires_at + 2800000) * 1000 - new Date().getTime() > 0
-      ? false
-      : true;
-
-  const handleImgError = (e: SyntheticEvent<HTMLImageElement, Event>) => {
-    const target = e.target as HTMLImageElement;
-    target.src = '/svgs/default.svg';
-  };
-
-  const handleUrlCopy = (copyUrl: string) => {
-    copyUrl !== EXPIRED &&
-      navigator.clipboard &&
-      navigator.clipboard.writeText(copyUrl).then(() => {
-        alert(data.summary + ' 주소가 복사되었습니다.');
-      });
-  };
-
-  return (
-    <TableRow key={data.key}>
-      <TableCell textAlign="left">
-        <LinkInfo>
-          <CustomLink
-            to={{
-              pathname: `/${data.key}`,
-            }}
-          >
-            <LinkImage>
-              <img
-                referrerPolicy="no-referrer"
-                src={data.thumbnailUrl}
-                onError={handleImgError}
-                alt="thumbnail"
-              />
-            </LinkImage>
-          </CustomLink>
-
-          <LinkTexts>
-            <CustomLink
-              to={{
-                pathname: `/${data.key}`,
-              }}
-            >
-              <LinkTitle>{data.summary}</LinkTitle>
-            </CustomLink>
-
-            <LinkUrl
-              onClick={() => {
-                expireState ? handleUrlCopy(EXPIRED) : handleUrlCopy(copyUrl);
-              }}
-              expired={expireState}
-            >
-              {expireState ? '만료됨' : copyUrl}
-            </LinkUrl>
-          </LinkTexts>
-        </LinkInfo>
-        <span />
-      </TableCell>
-
-      <TableCell textAlign="center">
-        <span>파일개수</span>
-        <CustomLink
-          to={{
-            pathname: `/${data.key}`,
-          }}
-        >
-          <span>{data.count.toLocaleString('en')}</span>
-        </CustomLink>
-      </TableCell>
-      <TableCell>
-        <span>파일사이즈</span>
-        <CustomLink
-          to={{
-            pathname: `/${data.key}`,
-          }}
-        >
-          <span>
-            {fileSize(data.files.reduce((acc, cur) => acc + cur.size, 0))}
-          </span>
-        </CustomLink>
-      </TableCell>
-      <TableCell>
-        <span>유효기간</span>
-        <CustomLink
-          to={{
-            pathname: `/${data.key}`,
-          }}
-        >
-          {/* <span>{data.expires_at}</span> */}
-          <Validity date={data.expires_at + 2800000} />
-        </CustomLink>
-      </TableCell>
-      <TableCell receiver>
-        <span>받은사람</span>
-        <CustomLink
-          to={{
-            pathname: `/${data.key}`,
-          }}
-        >
-          {new Array(data.download_count).fill(0).map((el, index) => (
-            <LinkReceivers key={index + el}>
-              <Avatar text={(index + 10).toString(32)} />
-            </LinkReceivers>
-          ))}
-        </CustomLink>
-      </TableCell>
-    </TableRow>
-  );
-};
-
-const CustomLink = styled(Link)`
-  text-decoration: none;
-  color: ${colors.grey700};
-`;
 
 const Title = styled.h2`
   color: ${colors.grey700};
@@ -225,92 +108,6 @@ const TableBody = styled.tbody`
       &:first-child {
         border-top: none;
       }
-    }
-  }
-`;
-
-const TableRow = styled.tr`
-  color: inherit;
-  display: table-row;
-  vertical-align: middle;
-  outline: 0px;
-  font-weight: inherit;
-  font-size: inherit;
-`;
-interface TableCellProps {
-  textAlign?: string;
-  receiver?: boolean;
-}
-const TableCell = styled.th<TableCellProps>`
-  font-weight: inherit;
-  font-size: inherit;
-  font-size: 12px;
-  line-height: 24px;
-  display: table-cell;
-  vertical-align: inherit;
-  border-bottom: 1px solid ${colors.grey300};
-  text-align: ${({ textAlign }) => textAlign || 'center'};
-  padding: 16px;
-  ${({ receiver }) => receiver && `max-width: 150px;`}
-
-  @media (max-width: 768px) {
-    ${({ receiver }) => receiver && `max-width: 100%;`}
-  }
-`;
-
-const LinkInfo = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const LinkImage = styled.div`
-  width: 40px;
-  height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  img {
-    border-radius: 4px;
-  }
-`;
-
-const LinkTexts = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-left: 16px;
-
-  & > * {
-    margin: 0;
-  }
-`;
-
-const LinkTitle = styled.p`
-  font-size: 16px;
-  font-weight: 500;
-  color: ${colors.grey700};
-  &:hover {
-    color: ${colors.teal700};
-  }
-`;
-
-interface LinkUrlProps {
-  expired?: boolean;
-}
-const LinkUrl = styled.a<LinkUrlProps>`
-  text-decoration: ${({ expired }) => (expired ? 'line-through' : 'underline')};
-`;
-
-const LinkReceivers = styled.div`
-  display: inline-flex;
-
-  & > * + * {
-    margin-left: 8px;
-  }
-
-  @media (max-width: 768px) {
-    & + & {
-      margin-left: 8px;
     }
   }
 `;
