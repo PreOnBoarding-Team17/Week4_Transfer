@@ -33,7 +33,7 @@ const TableDataInfo: FC<TableDataInfoProps> = ({
       >
         {count && <span>{count.toLocaleString('en')}</span>}
         {fileSize && <span>{fileSize}</span>}
-        {expiresAt && <Validity date={expiresAt + 2730000} />}
+        {expiresAt && <Validity date={expiresAt + 2890000} />}
         {downloadCount &&
           Array(downloadCount)
             .fill(0)
