@@ -41,7 +41,11 @@ const TableData: FC<DataInterface> = (data: DataInterface) => {
             count={tableDataInfoData.count}
             fileSize={tableDataInfoData.fileSize}
             expiresAt={tableDataInfoData.expiresAt}
-            downloadCount={tableDataInfoData.downloadCount}
+            downloadCount={
+              tableDataInfoData.downloadCount === 0
+                ? undefined
+                : tableDataInfoData.downloadCount
+            }
           />
         );
       })}

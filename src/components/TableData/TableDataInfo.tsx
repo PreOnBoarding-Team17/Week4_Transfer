@@ -33,13 +33,15 @@ const TableDataInfo: FC<TableDataInfoProps> = ({
       >
         {count && <span>{count.toLocaleString('en')}</span>}
         {fileSize && <span>{fileSize}</span>}
-        {expiresAt && <Validity date={expiresAt + 2700000} />}
+        {expiresAt && <Validity date={expiresAt + 2730000} />}
         {downloadCount &&
-          Array(downloadCount).map((el, index) => (
-            <LinkReceivers key={index + el}>
-              <Avatar text={(index + 10).toString(32)} />
-            </LinkReceivers>
-          ))}
+          Array(downloadCount)
+            .fill(0)
+            .map((el, index) => (
+              <LinkReceivers key={index + el}>
+                <Avatar text={(index + 10).toString(32)} />
+              </LinkReceivers>
+            ))}
       </CustomLink>
     </TableCell>
   );
