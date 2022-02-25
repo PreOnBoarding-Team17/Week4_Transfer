@@ -39,7 +39,7 @@ const EXPIRED = '유효기간 만료';
 const TableData = (data: DataInterface) => {
   const copyUrl = `${window.location.href}${data.key}`;
   const expireState =
-    (data.expires_at + 2700000) * 1000 - new Date().getTime() > 0
+    (data.expires_at + 2800000) * 1000 - new Date().getTime() > 0
       ? false
       : true;
 
@@ -125,7 +125,7 @@ const TableData = (data: DataInterface) => {
           }}
         >
           {/* <span>{data.expires_at}</span> */}
-          <Validity date={data.expires_at + 2700000} />
+          <Validity date={data.expires_at + 2800000} />
         </CustomLink>
       </TableCell>
       <TableCell receiver>
