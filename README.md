@@ -133,11 +133,17 @@ src
 
 [풀리퀘스트 링크](https://github.com/PreOnBoarding-Team17/Week4_Transfer/pulls?q=is%3Apr+is%3Aclosed)
 
+![스크린샷 2022-02-26 오전 12 27 25](https://user-images.githubusercontent.com/98322239/155741817-f1a3eab6-0a7a-488a-8ddb-8a5b96183ccb.png)
+
+
 <br/>
 
 ### [3] 이슈를 작성해 서로의 진행상황을 공유했습니다 👀
 
 [이슈 링크](https://github.com/PreOnBoarding-Team17/Week4_Transfer/issues?q=is%3Aissue+is%3Aclosed)
+
+![스크린샷 2022-02-26 오전 12 27 54](https://user-images.githubusercontent.com/98322239/155741826-6cee5461-f3f4-488b-ba9a-6d97f646501c.png)
+
 
 <br/>
 
